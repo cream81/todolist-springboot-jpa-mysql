@@ -1,0 +1,32 @@
+version: '3.8' 
+
+services:
+    
+  java:
+    image: openjdk:11
+    container_name: todolist_java1
+    ports:
+      - 8080:8080
+    tty: true
+    volumes:
+      - ./springboot-project:/springboot-project
+    working_dir: /springboot-project
+
+  mysql:
+    image: mysql8.0
+    container_name: todolist_mysql1
+    build: ./docker-config/mysql/
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+      TZ: 'Asia/Tokyo'
+    
+    #コンテナ内のデータをホスト(コンテナ外)側の領域に永続化する定義です
+    #書き方は「ホスト側:コンテナ側」で対応するように書きます
+    volumes:
+      - ./docker-config/mysql/initdb.d:/docker-entrypoint-initdb.d #初期処理のフォルダ。初回起動のみでおｋ
+      - ./docker-config/mysql/db:/var/lib/mysql #ここにデータ永続化するためのファイルが入る。
