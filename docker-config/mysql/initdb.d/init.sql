@@ -21,7 +21,8 @@ CREATE TABLE todo
   created_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   created_by varchar(255) REFERENCES user(role),
   last_modified_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  last_modified_by varchar(255) REFERENCES user(role)
+  last_modified_by varchar(255) REFERENCES user(role),
+  is_deleted tinyint(1) NOT NULL DEFAULT false
 )DEFAULT CHARACTER
   SET=utf8;
 

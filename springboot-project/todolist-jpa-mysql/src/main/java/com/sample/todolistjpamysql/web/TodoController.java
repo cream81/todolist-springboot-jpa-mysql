@@ -1,5 +1,7 @@
 package com.sample.todolistjpamysql.web;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,8 @@ public class TodoController {
 	// Show all todos
 	@GetMapping(value = "/todos")
 	public String todoList(Model model) {
-		model.addAttribute("todolist", repository.findAll());
+		// model.addAttribute("todolist", repository.findAll()); // 全データを取得する場合はfindAllを使用
+		model.addAttribute("todolist", repository.findByIsDeleted(false));
 		return "todos";
 	}
 
@@ -48,10 +51,19 @@ public class TodoController {
 		return "redirect:todos";
 	}
 
-	// Delete todo
+	// Delete todo 物理削除
+	//	@PostMapping(value = "/delete")
+	//	public String delete(long id) {
+	//		repository.deleteById(id);
+	//		return "redirect:todos";
+	//	}
+
+	// Delete todo 論理削除
 	@PostMapping(value = "/delete")
 	public String delete(long id) {
-		repository.deleteById(id);
+		Optional<Todo> todo = repository.findById(id); // Optional型はメソッドの戻り値に利用。
+		todo.ifPresentOrElse(function -> todo.get().setDeleted(true), () -> todo.get().setDeleted(false)); // 1つ目がnullでない、2つ目がnullの場合
+		repository.save(todo.get());
 		return "redirect:todos";
 	}
 

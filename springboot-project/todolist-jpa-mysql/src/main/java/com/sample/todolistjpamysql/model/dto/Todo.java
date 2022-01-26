@@ -44,6 +44,8 @@ public class Todo {
 	@LastModifiedBy
 	private String lastModifiedBy;
 
+	private boolean isDeleted;
+
 	public Todo() {
 
 	}
@@ -57,6 +59,7 @@ public class Todo {
 	@Override
 	public String toString() {
 		return "Todo [id=" + id + ", description=" + description + ", status=" + status + ", createdDate=" + createdDate
+				+ isDeleted
 				+ "]";
 	}
 }
